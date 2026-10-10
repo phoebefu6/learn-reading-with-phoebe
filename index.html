@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Six sessions on reading and remembering what you read: what reading speed really measures, reading with a question, why rereading feels like learning, a recall bench that measures your own speed and comprehension in the browser, spacing that plans for forgetting, and reading papers, docs and charts. Free, by Phoebe Fu.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Learn Reading with Phoebe">
+<meta property="og:description" content="Read less, remember more. Six sessions on the evidence about reading speed, active reading, retrieval and spacing, with a bench that measures you.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-reading-with-phoebe/">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-reading-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Learn Reading with Phoebe">
+<meta name="twitter:description" content="Your words per minute beside your comprehension, measured in your browser, and what the research says about rereading and spacing.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-reading-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Learn Reading with Phoebe</title>
+<link rel="stylesheet" href="assets/style.css?v=2">
+<style>
+
+  .stats-row { display: flex; gap: 2.4rem; margin-top: 1.5rem; flex-wrap: wrap; }
+  .stat b { display: block; font-size: 2.1rem; font-weight: 800; line-height: 1.05; font-variant-numeric: tabular-nums; }
+  .stat span { font-size: .72rem; opacity: 1; text-transform: uppercase; letter-spacing: .09em; font-weight: 600; }
+
+  .course-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+  .course-card {
+    border: 1px solid var(--hairline);
+    border-top: 4px solid var(--diff, var(--indigo));
+    border-radius: var(--radius);
+    padding: 1.2rem 1.3rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    text-decoration: none;
+    color: var(--ink);
+    background: #fff;
+    transition: box-shadow .15s ease, border-color .15s ease, transform .15s ease;
+    position: relative;
+  }
+  .course-card:hover { border-color: var(--indigo-soft); border-top-color: var(--diff, var(--indigo)); box-shadow: 0 8px 28px rgba(var(--shadow-rgb),.16); transform: translateY(-3px); }
+  .course-card .cicon { font-size: 1.7rem; line-height: 1; }
+  .course-card .cnum { font-size: .72rem; font-weight: 700; color: var(--indigo); text-transform: uppercase; letter-spacing: .1em; }
+  .course-card h3 { font-size: 1.05rem; font-weight: 800; line-height: 1.3; }
+  .course-card p { font-size: .85rem; color: var(--muted); flex: 1; }
+  .course-card .meta { display: flex; gap: .4rem; flex-wrap: wrap; }
+
+  .diff-legend { display: flex; gap: 1rem; margin-top: 1.6rem; font-size: .74rem; color: var(--muted); font-weight: 600; flex-wrap: wrap; }
+  .diff-legend i { display: inline-block; width: .85rem; height: .35rem; border-radius: 999px; margin-right: .35rem; vertical-align: middle; }
+
+  .paths { margin-top: 2.6rem; }
+  .paths h2 { font-size: 1.3rem; font-weight: 800; margin-bottom: .3rem; }
+  .paths .plede { color: var(--muted); font-size: .92rem; margin-bottom: .8rem; }
+  .path { display: flex; gap: .55rem; align-items: center; padding: .75rem 0; border-bottom: .5px solid var(--hairline); flex-wrap: wrap; }
+  .path:last-child { border-bottom: none; }
+  .path b { min-width: 15.5rem; font-size: .9rem; }
+  .path .pstep { background: var(--indigo-50); color: var(--indigo); border-radius: 999px; padding: .16rem .68rem; font-weight: 700; font-size: .8rem; text-decoration: none; transition: all .12s ease; }
+  .path .pstep:hover { background: var(--indigo); color: #fff; }
+  .path .parr { color: var(--muted); font-weight: 700; }
+
+  .mm-section { margin-top: 1.6rem; }
+  .mm-section h2 { font-size: 1.3rem; font-weight: 800; margin-bottom: .2rem; }
+  .mm-section .mm-lede { color: var(--muted); font-size: .92rem; margin-bottom: .4rem; }
+  .mm-wrap { border: 1px solid var(--hairline); border-radius: var(--radius); background: linear-gradient(180deg,#fff,var(--indigo-50)); padding: .6rem; overflow-x: auto; }
+  .mm-svg { width: 100%; height: auto; display: block; max-width: 60rem; margin: 0 auto; min-width: 34rem; }
+  .mm-link { cursor: pointer; text-decoration: none; }
+  .mm-node rect { transition: opacity .15s ease, filter .15s ease; }
+  .mm-node text { pointer-events: none; }
+  .mm-link:hover .mm-node rect { filter: brightness(1.06); }
+  .mm-edge { transition: opacity .15s ease; }
+
+  .not-this { border: 1px solid var(--hairline); border-left: 4px solid var(--clay); border-radius: var(--radius); background: #fff; padding: 1.1rem 1.3rem; margin-top: 1.2rem; }
+  .not-this h3 { font-size: .95rem; font-weight: 800; margin-bottom: .5rem; }
+</style>
+</head>
+<body>
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn with Phoebe · Productivity</div>
+    <h1>Learn <span class="accent">Reading</span> with Phoebe</h1>
+    <p class="sub">Reading and learning faster, on the evidence. Six sessions on the act of reading and remembering: what a words-per-minute number really measures and why comprehension caps it, choosing what to read and how deeply, why rereading and highlighting feel like learning when recall is what works, spacing reviews so forgetting is planned for, and reading the technical material work actually hands you: papers, documentation and charts. One constructed running case, an analyst with a week to read for a decision, and one bench that measures you.</p>
+    <div class="stats-row">
+      <div class="stat"><b data-count="6">6</b><span>sessions</span></div>
+      <div class="stat"><b data-count="238">238</b><span>wpm, adult silent reading of non-fiction</span></div>
+      <div class="stat"><b data-count="190">190</b><span>studies behind that number</span></div>
+      <div class="stat"><b data-count="3">3</b><span>public-domain passages on the bench</span></div>
+      <div class="stat"><b data-count="45">45</b><span>min per session</span></div>
+    </div>
+  </div>
+</header>
+<main class="wrap">
+  <section class="section">
+    <div class="paths" style="margin-top:0">
+      <h2>The six sessions 📚 <span style="font-size:.85rem;font-weight:600;color:var(--muted)">· from the speed myth to the technical paper</span></h2>
+      <p class="plede">The running case is <strong>Mina, a constructed analyst at Harbourline, an invented shipping company</strong>. By Friday she must recommend one of two warehouse-software vendors, and the pile is a 60-page vendor report, two research papers, the vendor's API documentation and a dashboard. Her first move was a speed-reading app. Mina, Harbourline and every number about them are invented for teaching, and every page says so.</p>
+    </div>
+    <div class="course-grid">
+      <a class="course-card" href="courses/01-what-reading-speed-measures.html" style="--diff:#34D399">
+        <span class="cicon">⏱️</span>
+        <span class="cnum">Session 1 · foundations</span>
+        <h3>What reading speed really measures</h3>
+        <p>Adults read non-fiction at about 238 words per minute, not 300. Why words, not eyes, set the pace, and what speed-reading courses, RSVP apps and the war on inner speech trade away.</p>
+        <span class="meta"><span class="pill amber">▶ Start here</span></span>
+      </a>
+      <a class="course-card" href="courses/02-reading-with-a-question.html" style="--diff:#FBBF24">
+        <span class="cicon">❓</span>
+        <span class="cnum">Session 2 · core</span>
+        <h3>Reading with a question</h3>
+        <p>Choose what to read and how deeply: inspectional against analytical reading, questions before, during and after, and a two-speed plan for a pile you cannot finish.</p>
+        <span class="meta"><span class="pill">decide the depth</span></span>
+      </a>
+      <a class="course-card" href="courses/03-rereading-feels-like-learning.html" style="--diff:#FBBF24">
+        <span class="cicon">🪞</span>
+        <span class="cnum">Session 3 · core</span>
+        <h3>Rereading feels like learning</h3>
+        <p>Why familiarity passes for knowledge, how ten learning techniques were rated on the evidence, and the honest place of highlighting, rereading and summaries.</p>
+        <span class="meta"><span class="pill">the fluency trap</span></span>
+      </a>
+      <a class="course-card" href="courses/04-the-recall-bench.html" style="--diff:#F87171">
+        <span class="cicon">🧪</span>
+        <span class="cnum">Session 4 · bench night</span>
+        <h3>The recall bench</h3>
+        <p>Your own words per minute and comprehension under three conditions, measured in your browser on public-domain passages, then a declared forgetting model with an anti-lever and a break button.</p>
+        <span class="meta"><span class="pill amber">★ the bench</span></span>
+      </a>
+      <a class="course-card" href="courses/05-spacing-and-forgetting.html" style="--diff:#FB923C">
+        <span class="cicon">📅</span>
+        <span class="cnum">Session 5 · deeper</span>
+        <h3>Spacing, and the forgetting you can plan for</h3>
+        <p>Turn the model into a calendar: when to come back to what you read, how to write recall prompts, and elaboration and self-explanation to make each review count.</p>
+        <span class="meta"><span class="pill">plan the gaps</span></span>
+      </a>
+      <a class="course-card" href="courses/06-papers-docs-charts.html" style="--diff:#FB923C">
+        <span class="cicon">📄</span>
+        <span class="cnum">Session 6 · deeper</span>
+        <h3>Reading a paper, a doc and a chart</h3>
+        <p>Three passes on a research paper, task-first reading of technical documentation, and reading a chart from its axes inward before believing its headline.</p>
+        <span class="meta"><span class="pill amber">📄 technical reading</span></span>
+      </a>
+    </div>
+    <div class="diff-legend">
+      <span><i style="background:#34D399"></i>foundations</span>
+      <span><i style="background:#FBBF24"></i>core</span>
+      <span><i style="background:#FB923C"></i>deeper</span>
+      <span><i style="background:#F87171"></i>bench night</span>
+    </div>
+  </section>
+  <section class="section">
+    <div class="paths" style="margin-top:0">
+      <h2>Your passport 🎫</h2>
+      <p class="plede">Clear all three quiz questions in a session and it gets stamped. Six stamps means you can read your own reading rate honestly, decide how deeply to read before you start, tell familiarity from knowledge, measure yourself on the bench, plan a month of spaced recall, and take a paper, a doc or a chart apart in the right order. Stamps live in this browser only.</p>
+    </div>
+    <div class="pp-strip"></div>
+  </section>
+  <section class="section">
+    <div class="not-this">
+      <h3>What this is not, so you land in the right place 🧭</h3>
+      <table class="clean">
+        <tr><th>If your question is</th><th>Go here instead</th></tr>
+        <tr><td>How do I capture, organise, review and find my notes as a system?</td><td><a href="https://phoebefu6.github.io/learn-pkm-with-phoebe/">Personal Knowledge Management ↗</a></td></tr>
+        <tr><td>How do I link notes by idea, Zettelkasten style, in a vault?</td><td><a href="https://phoebefu6.github.io/learn-obsidian-with-phoebe/">Obsidian ↗</a></td></tr>
+        <tr><td>How do I take notes visually, with drawings and layouts?</td><td><a href="https://phoebefu6.github.io/learn-sketchnoting-with-phoebe/">Sketchnoting ↗</a></td></tr>
+        <tr><td>How do I design a chart that is honest and clear?</td><td><a href="https://phoebefu6.github.io/learn-dataviz-with-phoebe/">Data Visualization ↗</a></td></tr>
+        <tr><td><strong>I have too much to read, and I forget most of what I do read.</strong></td><td><strong>you are in the right place</strong></td></tr>
+      </table>
+      <p style="margin-top:.7rem;font-size:.86rem;color:var(--muted)"><strong>The reading and the remembering.</strong> Note systems, linked vaults, visual notes and chart design are taught next door and linked from here rather than repeated.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="paths">
+      <h2>Choose your path 🗺️</h2>
+      <p class="plede">Three doors into the same conviction: understanding is the speed that counts, and remembering is something you schedule.</p>
+      <div class="path"><b>📥 My reading pile is out of control</b>
+        <a class="pstep" href="courses/01-what-reading-speed-measures.html">1</a><span class="parr">→</span>
+        <a class="pstep" href="courses/02-reading-with-a-question.html">2</a><span class="parr">→</span>
+        <a class="pstep" href="courses/06-papers-docs-charts.html">6</a>
+        <span style="font-size:.82rem;color:var(--muted)">drop the speed myth, choose the depth, read technical material in order</span>
+      </div>
+      <div class="path"><b>🧠 I read it and it is gone</b>
+        <a class="pstep" href="courses/03-rereading-feels-like-learning.html">3</a><span class="parr">→</span>
+        <a class="pstep" href="courses/04-the-recall-bench.html">4</a><span class="parr">→</span>
+        <a class="pstep" href="courses/05-spacing-and-forgetting.html">5</a>
+        <span style="font-size:.82rem;color:var(--muted)">see the trap, measure it, plan the gaps</span>
+      </div>
+      <div class="path"><b>📚 The whole craft</b>
+        <a class="pstep" href="courses/01-what-reading-speed-measures.html">1</a><span class="parr">→</span>
+        <a class="pstep" href="courses/02-reading-with-a-question.html">2</a><span class="parr">→</span>
+        <a class="pstep" href="courses/03-rereading-feels-like-learning.html">3</a><span class="parr">→</span>
+        <a class="pstep" href="courses/04-the-recall-bench.html">4</a><span class="parr">→</span>
+        <a class="pstep" href="courses/05-spacing-and-forgetting.html">5</a><span class="parr">→</span>
+        <a class="pstep" href="courses/06-papers-docs-charts.html">6</a>
+        <span style="font-size:.82rem;color:var(--muted)">from words per minute to a paper read in three passes</span>
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="paths" style="margin-top:0">
+      <h2>What is honest here 🧾</h2>
+      <p class="plede">Reading advice travels with confident numbers and famous techniques. Each claim on these pages carries its status.</p>
+    </div>
+    <table class="clean">
+      <tr><th>Claim</th><th>Status</th></tr>
+      <tr><td>Your words per minute, comprehension and effective rate on the bench</td><td><strong>Really measured</strong> in your browser: a real clock on three public-domain passages and five questions each. Results stay in this browser</td></tr>
+      <tr><td>What rereading tonight or spaced retrieval would leave you with in 30 days</td><td><strong>Modelled</strong> by a forgetting model printed on the widget, with illustrative settings; only the ordering of schedules is claimed</td></tr>
+      <tr><td>"The average reader reads 300 words per minute"</td><td><strong>A repeated number.</strong> A 190-study meta-analysis found 238 for silent reading of non-fiction, with most adults between 175 and 300. Session 1</td></tr>
+      <tr><td>"Speed reading triples your speed with full comprehension"; "stop subvocalising"</td><td><strong>Not supported.</strong> The tested gains came with lower comprehension, and suppressing inner speech hurts on harder texts. Session 1 teaches both sides</td></tr>
+      <tr><td>"Match teaching to your learning style"</td><td><strong>No adequate evidence base</strong> for the version that matters: the crossover result the hypothesis needs was not found. Session 3</td></tr>
+      <tr><td>Mina, Harbourline and every Harbourline number</td><td><strong>Constructed,</strong> for teaching</td></tr>
+    </table>
+  </section>
+  <section class="section mm-section">
+    <h2>The knowledge map 🧠</h2>
+    <p class="mm-lede">The whole path at a glance - hover a session to spotlight its concepts, click any node to jump in.</p>
+    <div class="mm-wrap"><div id="mindmap"></div></div>
+  </section>
+  <footer class="pagefoot">
+    <span>learn-reading-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span>Neighbours on the shelf: <a href="https://phoebefu6.github.io/learn-pkm-with-phoebe/">PKM ↗</a> &nbsp;·&nbsp; <a href="https://phoebefu6.github.io/learn-sketchnoting-with-phoebe/">Sketchnoting ↗</a> &nbsp;·&nbsp; <a href="https://phoebefu6.github.io/learn-obsidian-with-phoebe/">Obsidian ↗</a></span>
+  </footer>
+</main>
+<script>
+window.MINDMAP_DATA = {
+ "title": "Reading\n& Learning",
+ "centerColor": "#1C2862",
+ "sessions": [
+  {
+   "label": "What reading speed\nreally measures",
+   "href": "courses/01-what-reading-speed-measures.html",
+   "color": "#34D399",
+   "concepts": [
+    {
+     "label": "238 wpm, not 300",
+     "href": "courses/01-what-reading-speed-measures.html"
+    },
+    {
+     "label": "Words, not eyes",
+     "href": "courses/01-what-reading-speed-measures.html"
+    },
+    {
+     "label": "The speed trade-off",
+     "href": "courses/01-what-reading-speed-measures.html"
+    }
+   ]
+  },
+  {
+   "label": "Reading with\na question",
+   "href": "courses/02-reading-with-a-question.html",
+   "color": "#FBBF24",
+   "concepts": [
+    {
+     "label": "Inspectional first",
+     "href": "courses/02-reading-with-a-question.html"
+    },
+    {
+     "label": "Questions before reading",
+     "href": "courses/02-reading-with-a-question.html"
+    },
+    {
+     "label": "Decide the depth",
+     "href": "courses/02-reading-with-a-question.html"
+    }
+   ]
+  },
+  {
+   "label": "Rereading feels\nlike learning",
+   "href": "courses/03-rereading-feels-like-learning.html",
+   "color": "#FBBF24",
+   "concepts": [
+    {
+     "label": "Fluency is not memory",
+     "href": "courses/03-rereading-feels-like-learning.html"
+    },
+    {
+     "label": "Highlighting, rated low",
+     "href": "courses/03-rereading-feels-like-learning.html"
+    },
+    {
+     "label": "Recall, book shut",
+     "href": "courses/03-rereading-feels-like-learning.html"
+    }
+   ]
+  },
+  {
+   "label": "The recall\nbench",
+   "href": "courses/04-the-recall-bench.html",
+   "color": "#F87171",
+   "concepts": [
+    {
+     "label": "Your speed, your recall",
+     "href": "courses/04-the-recall-bench.html"
+    },
+    {
+     "label": "20 facts, 30 days",
+     "href": "courses/04-the-recall-bench.html"
+    },
+    {
+     "label": "Zero gap breaks it",
+     "href": "courses/04-the-recall-bench.html"
+    }
+   ]
+  },
+  {
+   "label": "Spacing and\nforgetting",
+   "href": "courses/05-spacing-and-forgetting.html",
+   "color": "#FB923C",
+   "concepts": [
+    {
+     "label": "Schedule the forgetting",
+     "href": "courses/05-spacing-and-forgetting.html"
+    },
+    {
+     "label": "Elaborate and explain",
+     "href": "courses/05-spacing-and-forgetting.html"
+    },
+    {
+     "label": "A month on a calendar",
+     "href": "courses/05-spacing-and-forgetting.html"
+    }
+   ]
+  },
+  {
+   "label": "Papers, docs\nand charts",
+   "href": "courses/06-papers-docs-charts.html",
+   "color": "#FB923C",
+   "concepts": [
+    {
+     "label": "Three passes on a paper",
+     "href": "courses/06-papers-docs-charts.html"
+    },
+    {
+     "label": "Docs: task first",
+     "href": "courses/06-papers-docs-charts.html"
+    },
+    {
+     "label": "Read the axes first",
+     "href": "courses/06-papers-docs-charts.html"
+    }
+   ]
+  }
+ ]
+};
+</script>
+<script src="assets/mindmap.js?v=1"></script>
+<script src="assets/app.js?v=1"></script>
+</body>
+</html>
