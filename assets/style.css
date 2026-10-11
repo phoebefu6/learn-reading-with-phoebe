@@ -19,7 +19,7 @@
   --amber-ink: #7A3416;
   --amber-50: #FCF4EF;
   --paper: #FCFCFE;
-  --code-bg: #F3F5FB;
+  --code-bg: #EEF1FA;
   --code-ink: #1A1F33;
   --scrim-rgb: 252,252,254;
   --shadow-rgb: 44,62,140;
@@ -241,7 +241,7 @@ details.card .body h4:first-child { margin-top: 0; }
 .pill.light { background: var(--indigo-50); color: var(--indigo); }
 .pill.inkpill { background: var(--ink); color: #fff; }
 .pill.amber, .pill.peach { background: var(--amber); color: #fff; }
-.pill.bare { color: var(--faint); }
+.pill.bare { color: var(--muted); }
 
 /* ---------- 4D grid ---------- */
 .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: .8rem; margin: .5rem 0 1rem; }
@@ -270,10 +270,11 @@ table.clean td { padding: .7rem .6rem; border-bottom: .5px solid var(--hairline)
 table.clean td:first-child { font-weight: 600; }
 
 /* ---------- prompt boxes ---------- */
-.prompt-box {
+.prompt-box{
   position: relative;
-  background: var(--code-bg);
-  color: var(--code-ink);
+  background: #EEF1FA;
+  border: 1px solid #E6E9F1;
+  color: #1A1F33;
   border-radius: var(--radius);
   padding: 1.1rem 1.2rem;
   margin: 1rem 0 1.2rem;
@@ -283,12 +284,12 @@ table.clean td:first-child { font-weight: 600; }
   white-space: pre-wrap;
   word-break: break-word;
 }
-.prompt-box .label {
+.prompt-box .label{
   position: absolute;
   top: -0.7rem;
   left: 1rem;
-  background: var(--indigo);
-  color: #fff;
+  background: #2C3E8C;
+  color: #FFFFFF;
   font-family: "Inter", -apple-system, sans-serif;
   font-size: .68rem;
   font-weight: 700;
@@ -299,7 +300,7 @@ table.clean td:first-child { font-weight: 600; }
 }
 .prompt-box.bad .label { background: var(--faint); color: var(--ink); }
 .prompt-box.good .label { background: var(--amber); color: #fff; }
-.copy-btn {
+.copy-btn{
   position: absolute;
   top: .7rem;
   right: .7rem;
@@ -409,7 +410,7 @@ figure.zoomable figcaption {
   gap: .4rem;
 }
 
-.lightbox {
+.lightbox{
   position: fixed;
   inset: 0;
   z-index: 100;
@@ -421,8 +422,10 @@ figure.zoomable figcaption {
   cursor: zoom-out;
 }
 .lightbox.open { display: flex; }
-.lightbox .inner {
+.lightbox .inner{
   background: #fff;
+  border: 1px solid #E6E9F1;
+  box-shadow: 0 10px 40px rgba(26,31,51,.14);
   border-radius: var(--radius);
   padding: 2rem;
   max-width: 94vw;
@@ -430,7 +433,7 @@ figure.zoomable figcaption {
   overflow: auto;
 }
 .lightbox .inner svg, .lightbox .inner img { width: min(88vw, 70rem); height: auto; }
-.lightbox .close-hint {
+.lightbox .close-hint{
   position: fixed;
   top: 1rem; right: 1.4rem;
   color: var(--ink);
@@ -455,7 +458,7 @@ figure.zoomable figcaption {
 .covered-row .note { margin-left: auto; color: var(--muted); font-size: .78rem; text-align: right; }
 
 /* ---------- cheat sheet footer ---------- */
-.cheat {
+.cheat{
   background: var(--indigo-50);
   color: var(--ink);
   border: 1px solid var(--indigo-soft);
@@ -1162,7 +1165,7 @@ figure.zoomable.can-scroll figcaption::after {
   transition: all .18s ease;
 }
 .pp-stamp:hover { border-color: var(--indigo-soft); }
-.pp-stamp i { font-size: 1.3rem; font-style: normal; opacity: .7; color: var(--ink); }
+.pp-stamp i { font-size: 1.3rem; font-style: normal; opacity: 1; color: var(--ink); }
 .pp-stamp b { font: 800 0.7rem Inter, sans-serif; }
 .pp-stamp.got {
   border-style: solid; border-color: var(--indigo);
@@ -1355,3 +1358,28 @@ figure.zoomable.can-scroll figcaption::after {
 .rd-c-sel { stroke: var(--indigo); stroke-width: 3.2; }
 .rd-results .btn { margin-top: 8px; }
 .rd-tablewrap { overflow-x: auto; max-width: 100%; }
+
+/* layout-patch-3: phone-width overflow (2026-10-10) */
+.sql-bar { flex-wrap: wrap; }
+@media (max-width: 480px) {
+  .covered-row { flex-wrap: wrap; }
+  .covered-row .note { margin-left: 0; text-align: left; flex-basis: 100%; }
+  details.card summary { flex-wrap: wrap; }
+  details.card summary .mini { white-space: normal; }
+  .wk, .sqlbox, .prompt-box, pre { max-width: 100%; overflow-x: auto; }
+  .mono, code, strong, .note { overflow-wrap: anywhere; }
+  select, input[type=range], label { max-width: 100%; }
+  canvas, svg, img { max-width: 100%; height: auto; }
+  .tree-kids, .tree-node-wrap, .tree-node, .rb-night, .al-row, .gd-field, .tl-row, .sl-row { max-width: 100%; overflow-x: auto; }
+  .tl-cols, .sl-cols, .bb-cols, .ev-cols, [class$="-cols"] { grid-template-columns: 1fr !important; display: grid; }
+  .tl-cols > *, .sl-cols > *, [class$="-cols"] > * { min-width: 0; max-width: 100%; }
+  .mono { white-space: normal; }
+  .er-w, .bb-lab, .tl-lev, .sl-lev { max-width: 100%; white-space: normal; }
+}
+/* contrast-patch-2b */
+.cheat a { color: var(--indigo-deep, var(--ink)); }
+.chip.audience { background: transparent; border-color: rgba(255,255,255,.55); }
+.masthead a, .masthead .sub a { color: #fff; text-decoration: underline; text-underline-offset: 2px; }
+.prompt-box b, .prompt-box strong { color: var(--indigo-deep, var(--ink)); }
+.prompt-box span, .prompt-box em, .prompt-box i { color: inherit; }
+.pp-stamp i { color: var(--ink); }
